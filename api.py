@@ -51,4 +51,4 @@ def get_least_rated_hotels():
     return jsonify([intel_to_dict(intel) for intel in hotels])
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5000)
