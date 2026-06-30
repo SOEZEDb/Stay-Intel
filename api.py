@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from models import db,Intel,Category
 import os
+import re
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 db_path = os.path.join(basedir, 'StayIntel.db')
@@ -10,14 +11,14 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
+
+
+
 def intel_to_dict(intel):
-    return{
-        'id': intel.id,
-        'name': intel.name,
-        'link': intel.link,
-        'provisions': ' | '.join([p.strip() for p in intel.provisions.split('\n') if p.strip()]),
-        'rating': intel.rating,
-    }
+    provisions = intel.provisions or ""
+    provisions = re.sub(r'\\u[0-9a-fA-F]{4}', '', provisions)
+    provisions = ' | '.join([p.strip() for p in provisions.split('\n') if p.strip()])
+
 
 @app.route('/list')
 def get_rows():
