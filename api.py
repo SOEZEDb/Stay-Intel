@@ -12,12 +12,18 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
 
-
-
 def intel_to_dict(intel):
     provisions = intel.provisions or ""
     provisions = re.sub(r'\\u[0-9a-fA-F]{4}', '', provisions)
     provisions = ' | '.join([p.strip() for p in provisions.split('\n') if p.strip()])
+
+    return  {
+        'id': intel.id,
+        'name': intel.name,
+        'link': intel.link,
+        'provisions': provisions,
+        'rating': intel.rating,
+    }
 
 
 @app.route('/list')
